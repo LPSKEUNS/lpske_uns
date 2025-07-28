@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Informasi LPSKE - Fakultas Teknik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            /* slate-50 */
+        }
+
+        .main-content {
+            display: none;
+        }
+
+        .main-content.active {
+            display: block;
+        }
+
+        .topbar-link {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            transition: all 0.2s ease-in-out;
+            white-space: nowrap;
+            color: #cbd5e1;
+            /* slate-300 */
+        }
+
+        .topbar-link:hover {
+            background-color: #334155;
+            /* slate-700 */
+            color: white;
+        }
+
+
+        .topbar-link.active {
+            background-color: #0ea5e9;
+            /* sky-500 */
+            color: white;
+        }
+
+        /* Gaya untuk input form */
+        .form-input {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #d1d5db;
+            /* gray-300 */
+            border-radius: 0.375rem;
+            /* rounded-md */
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            /* shadow-sm */
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #0ea5e9;
+            /* sky-500 */
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+            /* ring-sky-500/20 */
+        }
+
+        /* Gaya untuk tombol umum */
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            /* font-semibold */
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            /* shadow-md */
+            transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+            transform: scale(1);
+        }
+
+        .btn:hover {
+            transform: scale(1.02);
+            /* Sedikit membesar saat hover */
+        }
+
+        .btn-primary {
+            background-color: #0284c7;
+            /* sky-700 */
+        }
+
+        .btn-primary:hover {
+            background-color: #0369a1;
+            /* sky-800 */
+        }
+
+        .btn-secondary {
+            background-color: #4b5563;
+            /* gray-600 */
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #374151;
+            /* gray-700 */
+        }
+
+        .btn-success {
+            background-color: #059669;
+            /* emerald-600 */
+        }
+
+        .btn-success:hover {
+            background-color: #047857;
+            /* emerald-700 */
+        }
+
+        .btn-danger {
+            background-color: #dc2626;
+            /* red-600 */
+        }
+
+        .btn-danger:hover {
+            background-color: #b91c1c;
+            /* red-700 */
+        }
+
+        /* Gaya untuk kartu */
+        .card {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            /* rounded-xl */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            /* shadow-xl */
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Gaya untuk modal kustom */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            /* bg-gray-600 with opacity */
+            z-index: 40;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            /* rounded-xl */
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            /* shadow-2xl */
+            width: 90%;
+            max-width: 500px;
+            z-index: 50;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col h-screen">
+
+    <header class="bg-slate-800 text-white p-6 flex flex-col sm:flex-row items-center justify-between shadow-lg">
+        <div class="flex items-center space-x-2 mb-2 sm:mb-0 flex-shrink-0">
+            <img src="img/TIUNS.png" class="h-12 w-12 rounded-full" alt="Logo Fakultas Teknik">
+            <div class="text-left">
+                <h1 class="text-base font-bold leading-tight">Fakultas Teknik</h1>
+                <p class="text-xs text-slate-400 leading-tight">Universitas Sebelas Maret</p>
+            </div>
+        </div>
+
+       <nav
+  class="flex-grow flex items-center justify-start sm:justify-end gap-x-2 md:gap-x-3 text-xs sm:text-sm overflow-visible py-1 sm:py-0"
+>
+  <a href="#" data-page="home"
+    class="topbar-link active font-medium hover:text-sky-300 flex items-center flex-shrink-0"><i
+      class="fas fa-home mr-1"></i> Beranda</a>
+  <a href="#" data-page="fasilitas"
+    class="topbar-link font-medium hover:text-sky-300 flex items-center flex-shrink-0"><i
+      class="fas fa-cogs mr-1"></i> Fasilitas</a>
+  <a href="#" data-page="dokumentasi"
+    class="topbar-link font-medium hover:text-sky-300 flex items-center flex-shrink-0"><i
+      class="fas fa-camera-retro mr-1"></i> Dokumentasi</a>
+  <a href="#" data-page="alumni"
+    class="topbar-link font-medium hover:text-sky-300 flex items-center flex-shrink-0"><i
+      class="fas fa-users mr-1"></i> Alumni</a>
+ 
+  <a href="#" data-page="logbook"
+    class="topbar-link font-medium hover:text-sky-300 flex items-center flex-shrink-0"><i
+      class="fas fa-book mr-1"></i> Logbook</a>
+
+  <!-- ========== DROPDOWN LOGIN ========= -->
+  <!-- ======================= LOGIN DROPDOWN ========================== -->
+<div id="login-dropdown-container" class="relative flex-shrink-0">
+  <button id="login-dropdown-button"
+    class="topbar-link flex items-center gap-1 focus:outline-none font-medium hover:text-sky-300"
+    aria-expanded="false">
+    <i class="fas fa-sign-in-alt mr-1"></i>
+    Login
+    <i class="fas fa-caret-down text-xs"></i>
+  </button>
+
+  <div id="login-dropdown-menu"
+    class="absolute top-full right-0 mt-2 w-44 bg-white text-slate-800 rounded-md shadow-md py-2 z-50 hidden">
+    <a href="login_admin.php" class="block px-4 py-2 text-sm hover:bg-gray-100">Admin</a>
+    <a href="login_asisten.php" class="block px-4 py-2 text-sm hover:bg-gray-100">Asisten</a>
+  </div>
+</div>
+
+
+
+    </header>
+    
+
+
+
+    <main class="flex-1 p-4 md:p-8 overflow-y-auto bg-gray-50">
+        <div id="home" class="main-content active">
+            <!-- Hero Section -->
+            <div class="relative rounded-xl shadow-xl overflow-hidden mb-12 h-96 md:h-[32rem] lg:h-[38rem]">
+                <!-- Gambar Latar -->
+                <img src="https://ft.uns.ac.id/storage/images/2022-07-15_13_50_54_DSC08992ok.jpg"
+                    alt="Suasana Laboratorium LPSKE" class="absolute inset-0 w-full h-full object-cover"
+                    onerror="this.onerror=null;this.src='https://placehold.co/1200x400/cccccc/ffffff?text=Gagal+Muat+Gambar';">
+
+                <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+                <div class="relative h-full flex flex-col justify-center items-center text-center p-4">
+                    <h2 class="text-4xl md:text-6xl font-extrabold text-white mb-4 leading-tight text-shadow">
+                        Selamat Datang di <span class="text-sky-400">LPSKE</span>
+                    </h2>
+                    <p class="text-slate-200 text-lg md:text-xl max-w-3xl leading-relaxed text-shadow">
+                        Pusat keunggulan di Teknik Industri UNS yang berfokus pada rekayasa ergonomi, perancangan sistem
+                        kerja, dan manajemen lingkungan.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Judul untuk Kartu Layanan -->
+            <div class="text-center mb-8">
+                <p class="text-slate-500 mt-1">Jelajahi berbagai fitur yang kami sediakan.</p>
+            </div>
+
+            <!-- Grid Kartu Layanan -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="card cursor-pointer" onclick="navigateToPage('dosen')">
+                    <h3 class="font-bold text-xl mb-2 text-sky-700 flex items-center"><i
+                            class="fas fa-user-tie mr-2"></i> Dosen</h3>
+                    <p class="text-slate-600">Lihat daftar dosen pengampu di Laboratorium Perancangan Sistem Kerja dan
+                        Ergonomi.</p>
+                </div>
+                <div class="card cursor-pointer" onclick="navigateToPage('asisten')">
+                    <h3 class="font-bold text-xl mb-2 text-sky-700 flex items-center"><i
+                            class="fas fa-user-graduate mr-2"></i> Asisten </h3>
+                    <p class="text-slate-600">Kenali tim asisten laboratorium yang siap membantu kegiatan Anda.</p>
+                </div>
+                <div class="card cursor-pointer" onclick="navigateToPage('inventory')">
+                    <h3 class="font-bold text-xl mb-2 text-sky-700 flex items-center"><i class="fas fa-boxes mr-2"></i>
+                        Inventaris Alat</h3>
+                    <p class="text-slate-600">Cek ketersediaan berbagai alat dan fasilitas ruang laboratorium.</p>
+                </div>
+              
+                <div class="card cursor-pointer" onclick="navigateToPage('logbook')">
+                    <h3 class="font-bold text-xl mb-2 text-sky-700 flex items-center"><i class="fas fa-book mr-2"></i>
+                        Logbook </h3>
+                    <p class="text-slate-600"> Logbook kegiatan hari ini.</p>
+                </div>
+                <div class="card cursor-pointer" onclick="navigateToPage('izin')">
+                    <h3 class="font-bold text-xl mb-2 text-sky-700 flex items-center"><i
+                            class="fas fa-file-alt mr-2"></i> Izin Penelitian</h3>
+                    <p class="text-slate-600">Ajukan izin untuk melakukan penelitian atau kegiatan di dalam lab.</p>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div id="dosen" class="main-content">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6">Database Dosen LPSKE</h2>
+            <div class="bg-white p-4 rounded-lg shadow-md overflow-x-auto">
+                <table class="min-w-full text-left table-auto">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 uppercase text-sm leading-normal">
+                            <th class="py-3 px-6 text-left">Nama Dosen</th>
+                            <th class="py-3 px-6 text-left">Jabatan</th>
+                            <th class="py-3 px-6 text-left">NIP</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="dosen-table" class="text-slate-600 text-sm font-light"></tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div id="asisten" class="main-content">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6">Database Asisten</h2>
+            <div id="asisten-container" class="space-y-8"></div>
+        </div>
+
+
+        <div id="inventory" class="main-content">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6">Inventaris Alat & Ruang</h2>
+            <div class="bg-white p-4 rounded-lg shadow-md overflow-x-auto">
+                <table class="min-w-full text-left table-auto">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 uppercase text-sm leading-normal">
+                            <th class="py-3 px-6 text-left">Nama Alat/Ruang</th>
+                            <th class="py-3 px-6 text-left">Kode</th>
+                            <th class="py-3 px-6 text-left">Total</th>
+                            <th class="py-3 px-6 text-left">Tersedia</th>
+                            <th class="py-3 px-6 text-left">Keterangan</th>
+                            <th class="py-3 px-6 text-left">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-table" class="text-slate-600 text-sm font-light">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div id="dokumentasi" class="main-content">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6">Dokumentasi Kegiatan</h2>
+            <div id="dokumentasi-list" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <p class="text-slate-600">Konten untuk dokumentasi akan ditampilkan di sini.</p>
+            </div>
+        </div>
+
+        <div id="alumni" class="main-content">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6">Alumni Stories</h2>
+            <div id="alumni-list" class="space-y-6">
+                <p class="text-slate-600">Kisah-kisah alumni akan ditampilkan di sini.</p>
+            </div>
+        </div>
+
+        <div id="fasilitas" class="main-content">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6">Fasilitas & SOP</h2>
+            <p class="text-slate-600">Informasi mengenai fasilitas dan Standar Operasional Prosedur laboratorium akan
+                ditampilkan di sini.</p>
+        </div>
+
+        <div id="peminjaman" class="main-content">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6">Formulir Peminjaman Alat/Ruang</h2>
+            <div class="card max-w-lg mx-auto">
+                <form id="form-peminjaman" class="space-y-4">
+                    <div>
+                        <label for="select-inventory" class="block text-slate-700 text-sm font-bold mb-2">Pilih
+                            Alat/Ruang</label>
+                        <select id="select-inventory" name="id_alat" class="form-input" required>
+                            <option value="">-- Pilih Alat/Ruang --</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="pinjam-nama" class="block text-slate-700 text-sm font-bold mb-2">Nama
+                            Peminjam</label>
+                        <input type="text" id="pinjam-nama" name="nama_peminjam" class="form-input" required>
+                    </div>
+                    <div>
+                        <label for="pinjam-keperluan"
+                            class="block text-slate-700 text-sm font-bold mb-2">Keperluan</label>
+                        <textarea id="pinjam-keperluan" name="keperluan" class="form-input" rows="3"
+                            required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-full">Ajukan Peminjaman</button>
+                </form>
+            </div>
+        </div>
+        <div id="pengembalian" class="main-content">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6">Pengembalian Alat/Ruang</h2>
+            <p class="text-slate-600 mb-4">Berikut adalah daftar alat yang sedang Anda pinjam. Klik tombol "Kembalikan"
+                untuk proses pengembalian.</p>
+
+            <div class="bg-white p-4 rounded-lg shadow-md overflow-x-auto">
+                <table class="min-w-full text-left table-auto">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 uppercase text-sm leading-normal">
+                            <th class="py-3 px-6 text-left">Nama Alat</th>
+                            <th class="py-3 px-6 text-left">Peminjam</th>
+                            <th class="py-3 px-6 text-left">Keperluan</th>
+                            <th class="py-3 px-6 text-left">Status</th>
+                            <th class="py-3 px-6 text-left">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pengembalian-table" class="text-slate-600 text-sm font-light"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="izin" class="main-content">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6">Formulir Pengajuan Izin</h2>
+            <div class="card max-w-2xl mx-auto">
+                <form id="formPengajuanIzin" class="space-y-4">
+                    <div>
+                        <label for="namaPengaju" class="block text-slate-700 text-sm font-bold mb-2">Nama Lengkap
+                            Anda:</label>
+                        <input type="text" id="namaPengaju" name="nama_pengaju" placeholder="Masukkan nama lengkap"
+                            class="form-input" required>
+                    </div>
+                    <div>
+                        <label for="judulPenelitian" class="block text-slate-700 text-sm font-bold mb-2">Judul
+                            Penelitian / Kegiatan:</label>
+                        <input type="text" id="judulPenelitian" name="judul_penelitian"
+                            placeholder="Contoh: Penelitian Sensor Suhu" class="form-input" required>
+                    </div>
+                    <div>
+                        <label for="deskripsiIzin" class="block text-slate-700 text-sm font-bold mb-2">Deskripsi Lengkap
+                            / Keperluan:</label>
+                        <textarea id="deskripsiIzin" name="deskripsi" rows="4"
+                            placeholder="Jelaskan secara singkat keperluan izin Anda" class="form-input"
+                            required></textarea>
+                    </div>
+                    <div class="flex items-center justify-end">
+                        <button type="submit" class="btn btn-primary">Ajukan Izin</button>
+                    </div>
+                </form>
+            </div>
+            <h3 class="text-2xl font-bold text-slate-800 mt-8 mb-4">Riwayat Pengajuan Izin Anda</h3>
+            <div id="izin-history" class="space-y-4">
+                <p class="text-slate-600 text-center">Riwayat pengajuan izin akan ditampilkan di sini.</p>
+            </div>
+        </div>
+
+        <div id="presensi" class="main-content">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6">Presensi Piket Asisten</h2>
+            <div class="card text-center max-w-md mx-auto">
+                <p class="text-lg text-slate-600 mb-2">Waktu Server Saat Ini:</p>
+                <div id="presensi-actions" class="flex gap-4">
+                    <button id="check-in-btn" class="btn btn-success w-full">Check-In</button>
+                    <button id="check-out-btn" class="btn btn-danger w-full">Check-Out</button>
+                </div>
+            </div>
+            <h3 class="text-2xl font-bold text-slate-800 mt-8 mb-4">Log Presensi Hari Ini</h3>
+            <div class="bg-white p-4 rounded-lg shadow-md overflow-x-auto">
+                <table class="min-w-full text-left table-auto">
+                   
+                </table>
+            </div>
+        </div>
+
+        <div id="logbook" class="main-content">
+    <h2 class="text-3xl font-bold text-slate-800 mb-6">Riwayat Logbook Kegiatan Laboratorium</h2>
+    <div class="bg-white p-8 rounded-xl shadow-lg">
+        <!-- Container untuk menampilkan riwayat logbook -->
+        <div id="logbook-history" class="space-y-4 max-h-[40rem] overflow-y-auto">
+            <!-- Riwayat logbook publik akan ditampilkan di sini oleh JavaScript -->
+            <p class="text-slate-500 text-center">Memuat riwayat logbook...</p>
+        </div>
+    </div>
+</div>
+    </main>
+
+    <div id="custom-modal" class="modal-backdrop hidden">
+        <div class="modal-content">
+            <h3 id="modal-title" class="text-xl font-bold mb-4 text-slate-800"></h3>
+            <p id="modal-body" class="text-slate-700 mb-6"></p>
+            <div class="flex justify-end space-x-2">
+                <button id="modal-close-btn" class="btn btn-secondary">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+     
+    <script>
+        // API Base URL
+        const API_BASE_URL = 'http://localhost/lpske/api/'; // Sesuaikan jika folder API berbeda
+
+        // Fungsi navigasi umum untuk topbar
+        function navigateToPage(pageId) {
+            // Hapus kelas 'active' dari semua topbar link
+            document.querySelectorAll(".topbar-link").forEach(l => l.classList.remove("active"));
+
+            // Tambahkan kelas 'active' ke link topbar yang sesuai (jika ada)
+            const correspondingTopbarLink = document.querySelector(`.topbar-link[data-page="${pageId}"]`);
+            if (correspondingTopbarLink) {
+                correspondingTopbarLink.classList.add("active");
+            }
+
+            // Sembunyikan semua konten utama
+            document.querySelectorAll(".main-content").forEach(page => page.classList.remove("active"));
+
+            // Tampilkan konten yang dipilih
+            document.getElementById(pageId).classList.add("active");
+
+            // Panggil fungsi pemuatan data jika diperlukan
+            if (pageId === "dosen") {
+                loadDataDosen();
+            } else if (pageId === "asisten") {
+                loadAsisten();
+            } else if (pageId === "inventory") {
+                loadInventory();
+            } else if (pageId === "peminjaman") {
+                loadInventoryOptions();
+            } else if (pageId === "pengembalian") {
+                loadPengembalian();
+            } else if (pageId === "izin") {
+                loadIzinHistory();
+            } else if (pageId === "presensi") {
+                updateTime(); // Update time immediately
+                loadPresensiLogToday();
+            } else if (pageId === "logbook") {
+                loadLogbookHistory();
+            }
+            // Tambahkan kondisi untuk halaman lain yang butuh pemuatan data
+        }
+
+        // Event Listeners untuk Topbar Links
+        document.querySelectorAll(".topbar-link").forEach(link => {
+            link.addEventListener("click", function (e) {
+                if (!this.hasAttribute('data-page')) {
+                    // Jika link tidak punya atribut 'data-page' (seperti link Admin),
+                    // maka hentikan fungsi ini dan biarkan browser pindah halaman.
+                    return;
+                }
+                e.preventDefault();
+                const selectedPage = this.getAttribute("data-page");
+                navigateToPage(selectedPage);
+            });
+        });
+
+        // ======================== LOAD DATA FUNCTIONS ========================
+
+        function loadDataDosen() {
+            fetch(API_BASE_URL + "get_dosen.php")
+                .then(res => res.json())
+                .then(data => {
+                    const table = document.getElementById("dosen-table");
+                    table.innerHTML = "";
+                    if (data.status === "error") { // Check for error status from PHP
+                        table.innerHTML = `<tr><td colspan="4" class="p-3 text-center text-red-500">${data.pesan || "Gagal memuat data dosen."}</td></tr>`;
+                        return;
+                    }
+                    if (data.length === 0) {
+                        table.innerHTML = `<tr><td colspan="4" class="p-3 text-center text-slate-500">Tidak ada data dosen.</td></tr>`;
+                        return;
+                    }
+                    data.forEach(dosen => {
+                        const row = document.createElement("tr");
+                        row.classList.add("border-b", "last:border-b-0", "hover:bg-slate-50");
+                        row.innerHTML = `
+                            <td class="py-2 px-6">${dosen.nama_lengkap}</td>
+                            <td class="py-2 px-6">${dosen.jabatan || '-'}</td>
+                            <td class="py-2 px-6">${dosen.nip}</td>
+                           
+                            
+                            
+                        `;
+                        table.appendChild(row);
+                    });
+                })
+                .catch(err => {
+                    console.error("Gagal load dosen:", err);
+                    document.getElementById("dosen-table").innerHTML = `<tr><td colspan="4" class="p-3 text-center text-red-500">Gagal memuat data dosen. Periksa koneksi atau server.</td></tr>`;
+                });
+        }
+
+        function loadAsisten() {
+            fetch(API_BASE_URL + "get_asisten.php")
+                .then(res => res.json())
+                .then(data => {
+                    const container = document.getElementById("asisten-container");
+                    container.innerHTML = "";
+
+                    if (!data || data.length === 0) {
+                        container.innerHTML = `<p class="text-center text-slate-500">Tidak ada data asisten.</p>`;
+                        return;
+                    }
+
+                    const groupedByAngkatan = data.reduce((acc, asisten) => {
+                        const angkatan = asisten.angkatan;
+                        if (!acc[angkatan]) {
+                            acc[angkatan] = [];
+                        }
+                        acc[angkatan].push(asisten);
+                        return acc;
+                    }, {});
+
+                    // =================================================================
+                    // KUNCI UTAMA: Mengambil tahun angkatan dan mengurutkannya DESC
+                    const sortedAngkatan = Object.keys(groupedByAngkatan).sort((a, b) => b - a);
+                    // =================================================================
+
+                    // Loop menggunakan variabel sortedAngkatan yang sudah diurutkan
+                    sortedAngkatan.forEach(angkatan => {
+                        const angkatanTitle = document.createElement("h3");
+                        angkatanTitle.className = "text-2xl font-bold text-slate-700";
+                        angkatanTitle.textContent = `Angkatan ${angkatan}`;
+                        container.appendChild(angkatanTitle);
+
+                        const tableWrapper = document.createElement("div");
+                        tableWrapper.className = "bg-white p-4 rounded-lg shadow-md overflow-x-auto";
+
+                        const table = document.createElement("table");
+                        table.className = "min-w-full text-left table-auto";
+                        table.innerHTML = `
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 uppercase text-sm leading-normal">
+                            <th class="py-3 px-6 text-left">Nama Asisten</th>
+                            <th class="py-3 px-6 text-left">NIM</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${groupedByAngkatan[angkatan].map(asisten => `
+                            <tr class="border-b last:border-b-0 hover:bg-slate-50">
+                                <td class="py-2 px-6">${asisten.nama}</td>
+                                <td class="py-2 px-6">${asisten.nim}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                `;
+
+                        tableWrapper.appendChild(table);
+                        container.appendChild(tableWrapper);
+                    });
+                })
+                .catch(err => {
+                    console.error("Gagal load asisten:", err);
+                    document.getElementById("asisten-container").innerHTML = `<p class="text-center text-red-500">Gagal memuat data.</p>`;
+                });
+        }
+
+        function loadInventory() {
+            // Fetch data dari get_inventory.php (yang sudah diperbaiki untuk mengirim string status)
+            fetch(API_BASE_URL + "get_inventory.php")
+                .then(res => res.json())
+                .then(data => {
+                    const tableBody = document.getElementById("inventory-table");
+                    tableBody.innerHTML = ""; // Clear existing rows
+
+                    // Definisikan warna untuk setiap status (berdasarkan string status)
+                    const statusColor = {
+                        "Tersedia": "bg-green-100 text-green-700",
+                        "Dipinjam": "bg-yellow-100 text-yellow-700",
+                        "Rusak": "bg-red-100 text-red-700",
+                        "Tidak Bisa dicek": "bg-blue-100 text-blue-700"
+                    };
+
+                    if (data.status === "error") {
+                        // Sesuaikan colspan menjadi 6 (untuk mengakomodasi kolom KETERANGAN baru)
+                        tableBody.innerHTML = `<tr><td colspan="6" class="p-3 text-center text-red-500">${data.pesan || "Gagal memuat data inventaris."}</td></tr>`;
+                        return;
+                    }
+                    if (data.length === 0) {
+                        // Sesuaikan colspan menjadi 6
+                        tableBody.innerHTML = `<tr><td colspan="6" class="p-3 text-center text-slate-500">Tidak ada data inventaris.</td></tr>`;
+                        return;
+                    }
+
+                    data.forEach(item => {
+                        const row = document.createElement("tr");
+                        row.classList.add("border-b", "last:border-b-0", "hover:bg-slate-50");
+                        row.innerHTML = `
+                            <td class="py-2 px-6">${item.nama_alat}</td>
+                            <td class="py-2 px-6">${item.kode_alat}</td>
+                            <td class="py-2 px-6">${item.jumlah}</td>
+                            <td class="py-2 px-6">${item.tersedia}</td>
+                            <td class="py-2 px-6">${item.keterangan || '-'}</td> <td class="py-2 px-6">
+                                <span class="px-3 py-1 rounded-full text-xs font-medium ${statusColor[item.status] || 'bg-gray-100 text-gray-700'}">
+                                    ${item.status}
+                                </span>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(err => {
+                    console.error("Gagal memuat data inventaris:", err);
+                    // Sesuaikan colspan menjadi 6
+                    document.getElementById("inventory-table").innerHTML = `<tr><td colspan="6" class="p-3 text-center text-red-500">Gagal memuat data inventaris. Periksa koneksi atau server.</td></tr>`;
+                });
+        }
+
+        function loadInventoryOptions() {
+            fetch(API_BASE_URL + "get_inventory.php")
+                .then(res => res.json())
+                .then(data => {
+                    const select = document.getElementById("select-inventory");
+                    select.innerHTML = `<option value="">-- Pilih Alat/Ruang --</option>`; // reset
+
+                    if (data.status === "error") {
+                        const option = document.createElement("option");
+                        option.value = "";
+                        option.textContent = data.pesan;
+                        select.appendChild(option);
+                        return;
+                    }
+
+                    data.forEach(item => {
+                        if (item.tersedia > 0) {
+                            const option = document.createElement("option");
+                            option.value = item.id_alat; // gunakan id sebagai value
+                            option.textContent = `${item.nama_alat} (${item.tersedia} tersedia)`;
+                            select.appendChild(option);
+                        }
+                    });
+                    if (data.length === 0 || data.filter(item => item.tersedia > 0).length === 0) {
+                        const option = document.createElement("option");
+                        option.value = "";
+                        option.textContent = "Tidak ada alat tersedia untuk dipinjam.";
+                        select.appendChild(option);
+                    }
+                })
+                .catch(err => {
+                    console.error("Gagal load opsi alat:", err);
+                    const select = document.getElementById("select-inventory");
+                    select.innerHTML = `<option value="">Gagal memuat opsi alat.</option>`;
+                });
+        }
+
+        function loadPengembalian() {
+            fetch(API_BASE_URL + "get_pinjam.php")
+                .then(res => res.json())
+                .then(data => {
+                    const table = document.getElementById("pengembalian-table");
+                    table.innerHTML = "";
+
+                    if (data.status === "error") {
+                        table.innerHTML = `<tr><td colspan="5" class="p-3 text-center text-red-500">${data.pesan || "Gagal memuat data peminjaman aktif."}</td></tr>`;
+                        return;
+                    }
+                    if (data.length === 0) {
+                        table.innerHTML = `<tr><td colspan="5" class="p-3 text-center text-slate-500">Tidak ada data peminjaman aktif.</td></tr>`;
+                        return;
+                    }
+
+                    data.forEach(item => {
+                        const row = document.createElement("tr");
+                        row.classList.add("border-b", "last:border-b-0", "hover:bg-slate-50");
+                        row.innerHTML = `
+                            <td class="py-2 px-6">${item.nama_alat}</td>
+                            <td class="py-2 px-6">${item.nama_peminjam}</td>
+                            <td class="py-2 px-6">${item.keperluan}</td>
+                            <td class="py-2 px-6">
+                                <span class="px-3 py-1 rounded-full text-xs font-medium ${item.status === 'Diajukan' ? 'bg-yellow-100 text-yellow-700' : (item.status === 'Dikembalikan' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700')}">${item.status}</span>
+                            </td>
+                            <td class="py-2 px-6">
+                                <button onclick="kembalikanAlat(${item.id_pinjam})" class="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Kembalikan</button>
+                            </td>
+                        `;
+                        table.appendChild(row);
+                    });
+                })
+                .catch(err => {
+                    console.error("Gagal load pengembalian:", err);
+                    document.getElementById("pengembalian-table").innerHTML = `<tr><td colspan="5" class="p-3 text-center text-red-500">Gagal memuat data pengembalian. Periksa koneksi atau server.</td></tr>`;
+                });
+        }
+
+
+        function loadIzinHistory() {
+            fetch(API_BASE_URL + "get_izin_history.php")
+                .then(res => res.json())
+                .then(data => {
+                    const izinList = document.getElementById("izin-history");
+                    izinList.innerHTML = "";
+                    if (data.status === "error") {
+                        izinList.innerHTML = `<p class="text-red-500 text-center">${data.pesan || "Gagal memuat riwayat pengajuan izin."}</p>`;
+                        return;
+                    }
+                    if (data.length === 0) {
+                        izinList.innerHTML = `<p class="text-slate-500 text-center">Belum ada riwayat pengajuan izin.</p>`;
+                        return;
+                    }
+                    data.forEach(izin => {
+                        const card = document.createElement("div");
+                        card.classList.add("card", "p-4", "border", "border-slate-200", "shadow-sm");
+
+                        let statusColorClass = 'bg-gray-100 text-gray-700'; // Default
+                        if (izin.status === 'Disetujui') {
+                            statusColorClass = 'bg-green-100 text-green-700';
+                        } else if (izin.status === 'Ditolak') {
+                            statusColorClass = 'bg-red-100 text-red-700';
+                        } else if (izin.status === 'Diajukan') { // 'Diajukan'
+                            statusColorClass = 'bg-yellow-100 text-yellow-700';
+                        }
+
+                        card.innerHTML = `
+                    <h3 class="font-bold text-lg mb-2 text-slate-800">${izin.judul_penelitian}</h3>
+                    <div class="flex justify-between items-center text-xs text-slate-500">
+                        <span>Diajukan: ${new Date(izin.tanggal_pengajuan).toLocaleString('id-ID')}</span>
+                        <span class="font-semibold px-2 py-1 rounded-full ${statusColorClass}">${izin.status}</span>
+                    </div>
+                `;
+
+                        izinList.appendChild(card);
+                    });
+                })
+                .catch(err => {
+                    console.error("Gagal memuat riwayat izin:", err);
+                    document.getElementById("izin-history").innerHTML = `<p class="text-red-500 text-center">Gagal memuat riwayat pengajuan izin. Periksa koneksi atau server.</p>`;
+                });
+        }
+
+
+        function loadPresensiLogToday() {
+            fetch(API_BASE_URL + "get_presensi_log.php")
+                .then(res => res.json())
+                .then(data => {
+                    const tableBody = document.getElementById("presensi-log-today");
+                    tableBody.innerHTML = "";
+                    if (data.status === "error") {
+                        tableBody.innerHTML = `<tr><td colspan="4" class="p-3 text-center text-red-500">${data.pesan || "Gagal memuat log presensi."}</td></tr>`;
+                        return;
+                    }
+                    if (data.length === 0) {
+                        tableBody.innerHTML = `<tr><td colspan="4" class="p-3 text-center text-slate-500">Belum ada presensi hari ini.</td></tr>`;
+                        return;
+                    }
+                    data.forEach(log => {
+                        const row = document.createElement("tr");
+                        row.classList.add("border-b", "last:border-b-0", "hover:bg-slate-50");
+                        row.innerHTML = `
+                            <td class="py-2 px-6">${log.nama_asisten}</td>
+                            <td class="py-2 px-6">${log.jam_masuk}</td>
+                            <td class="py-2 px-6">${log.jam_keluar || '-'}</td>
+                            <td class="py-2 px-6"><span class="px-3 py-1 rounded-full text-xs font-medium ${log.jam_keluar ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}">${log.jam_keluar ? 'Check-Out' : 'Check-In'}</span></td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(err => {
+                    console.error("Gagal memuat log presensi:", err);
+                    document.getElementById("presensi-log-today").innerHTML = `<tr><td colspan="4" class="p-3 text-center text-red-500">Gagal memuat log presensi. Periksa koneksi atau server.</td></tr>`;
+                });
+        }
+
+        function loadLogbookHistory() {
+    // Fungsi ini sekarang mengambil SEMUA logbook untuk ditampilkan ke publik
+    fetch(API_BASE_URL + "get_logbook_history.php") 
+        .then(res => res.json())
+        .then(data => {
+            const logbookHistory = document.getElementById("logbook-history");
+            logbookHistory.innerHTML = "";
+            if (data.status === "error" || data.length === 0) {
+                logbookHistory.innerHTML = `<p class="text-slate-500 text-center">Belum ada riwayat logbook.</p>`;
+                return;
+            }
+            data.forEach(log => {
+                const card = document.createElement("div");
+                card.classList.add("p-4", "border-b", "last:border-b-0");
+                card.innerHTML = `
+                    <p class="text-slate-700">${log.kegiatan}</p>
+                    <div class="flex justify-between items-center text-xs text-slate-400 mt-2">
+                        <span>Oleh: <strong>${log.nama_user || 'Asisten'}</strong></span>
+                        <span>Pada: ${new Date(log.tanggal).toLocaleString('id-ID')}</span>
+                    </div>
+                `;
+                logbookHistory.appendChild(card);
+            });
+        })
+        .catch(err => {
+            console.error("Gagal memuat riwayat logbook:", err);
+            document.getElementById("logbook-history").innerHTML = `<p class="text-red-500 text-center">Gagal memuat riwayat.</p>`;
+        });
+}
+
+
+        // ======================== SUBMISSION FUNCTIONS ========================
+
+        document.getElementById("form-peminjaman").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const idAlat = document.getElementById("select-inventory").value;
+            const namaPeminjam = document.getElementById("pinjam-nama").value;
+            const keperluan = document.getElementById("pinjam-keperluan").value;
+
+            if (!idAlat || !namaPeminjam || !keperluan) {
+                showModal("Peringatan", "Harap lengkapi semua data peminjaman!");
+                return;
+            }
+
+            fetch(API_BASE_URL + "ajukan_pinjam.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    id_alat: idAlat,
+                    nama_peminjam: namaPeminjam,
+                    keperluan: keperluan
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        showModal("Sukses", data.pesan);
+                        this.reset();
+                        loadInventory(); // Refresh inventory data
+                        loadInventoryOptions(); // Refresh select options
+                        loadPengembalian(); // Refresh pengembalian list
+                    } else {
+                        showModal("Gagal", data.pesan);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error saat mengirim data peminjaman:", error);
+                    showModal("Error", "Terjadi kesalahan saat mengajukan peminjaman. Cek console untuk detail.");
+                });
+        });
+
+        function kembalikanAlat(id_pinjam) {
+            if (!confirm("Apakah Anda yakin ingin mengembalikan alat ini?")) {
+                return;
+            }
+
+            fetch(API_BASE_URL + "kembalikan_alat.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id_pinjam: id_pinjam })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        showModal("Sukses", data.pesan);
+                        loadPengembalian(); // Refresh pengembalian list
+                        loadInventory(); // Refresh inventory data
+                    } else {
+                        showModal("Gagal", data.pesan);
+                    }
+                })
+                .catch(err => {
+                    console.error("Gagal mengembalikan alat:", err);
+                    showModal("Error", "Terjadi kesalahan saat mengembalikan alat. Cek console untuk detail.");
+                });
+        }
+
+        document.getElementById('formPengajuanIzin').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+
+            fetch('api/submit_izin.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.status === 'success') {
+                        this.reset();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat mengirim data.');
+                });
+        });
+
+
+        document.getElementById("check-in-btn").addEventListener("click", function () {
+            // Asumsi id_asisten, dalam aplikasi nyata ini akan dari sesi login
+            // Untuk demo, kita gunakan id_asisten=1. Sesuaikan jika Anda memiliki login.
+            fetch(API_BASE_URL + "check_in.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id_asisten: 1 })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    showModal(data.status === "success" ? "Sukses" : "Gagal", data.pesan);
+                    loadPresensiLogToday();
+                })
+                .catch(err => {
+                    console.error("Gagal check-in:", err);
+                    showModal("Error", "Terjadi kesalahan saat check-in. Cek console untuk detail.");
+                });
+        });
+
+        document.getElementById("check-out-btn").addEventListener("click", function () {
+            // Asumsi id_asisten, dalam aplikasi nyata ini akan dari sesi login
+            // Untuk demo, kita gunakan id_asisten=1. Sesuaikan jika Anda memiliki login.
+            fetch(API_BASE_URL + "check_out.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id_asisten: 1 })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    showModal(data.status === "success" ? "Sukses" : "Gagal", data.pesan);
+                    loadPresensiLogToday();
+                })
+                .catch(err => {
+                    console.error("Gagal check-out:", err);
+                    showModal("Error", "Terjadi kesalahan saat check-out. Cek console untuk detail.");
+                });
+        });
+
+        
+        
+
+        // Show current time (for presensi, now in header)
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString("id-ID", {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+            const currentTimeElement = document.getElementById("current-time");
+            if (currentTimeElement) {
+                currentTimeElement.textContent = timeString;
+            }
+        }
+        setInterval(updateTime, 1000);
+        updateTime(); // run once on load
+
+        // Custom Modal Functions
+        function showModal(title, body) {
+            document.getElementById("modal-title").textContent = title;
+            document.getElementById("modal-body").textContent = body;
+            document.getElementById("custom-modal").classList.remove("hidden");
+        }
+
+        // Modal close logic
+        document.getElementById("modal-close-btn").addEventListener("click", () => {
+            document.getElementById("custom-modal").classList.add("hidden");
+        });
+
+    
+document.addEventListener("DOMContentLoaded", () => {
+    // --- Bagian untuk Dropdown Login ---
+    const button = document.getElementById("login-dropdown-button");
+    const menu = document.getElementById("login-dropdown-menu");
+    const container = document.getElementById("login-dropdown-container");
+
+    if (button && menu && container) {
+        button.addEventListener("click", (e) => {
+            e.stopPropagation();
+            menu.classList.toggle("hidden");
+        });
+
+        // Tutup dropdown jika klik di luar
+        window.addEventListener("click", (e) => {
+            if (!container.contains(e.target)) {
+                menu.classList.add("hidden");
+            }
+        });
+    }
+
+    // --- Bagian untuk Memuat Halaman Awal ---
+    // Pastikan halaman home aktif saat pertama kali dibuka
+    navigateToPage('home'); 
+});
+    </script>
+</body>
+
+</html>
